@@ -1,7 +1,7 @@
 import './App.css'
 import React, { useRef, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { OrbitControls, ScrollControls, useScroll } from '@react-three/drei'
+import { OrbitControls, ScrollControls, useScroll, Stars } from '@react-three/drei'
 import gsap from 'gsap'
 
 function App() {
@@ -9,6 +9,8 @@ function App() {
   return (
     <>
       <Canvas>
+        <color attach="background" args={['black']} />
+        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
         <ScrollControls pages={3} damping={0.5}>
           <Scene />
         </ScrollControls>
@@ -48,7 +50,7 @@ const Scene = () => {
         y: Math.PI,
         duration: 0.25,
       }, 1.5) // start at 0.5
-      
+
   }, [])
 
   useFrame(() => {
@@ -76,8 +78,8 @@ const Ball = ({ tl }) => {
       // Добавляем анимацию в Timeline
       tl.current.to(ref.current.position, {
         y: 2,
-        duration: 1,
-      }, 0.5) // start at progress 0
+        duration: 3,
+      }, 0.65) // start at progress 0
 
       // tl.current.to(ref.current.position, {
       //   y: 0,
