@@ -1,7 +1,7 @@
 import './App.css'
 import React, { useRef, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { OrbitControls, ScrollControls, useScroll, Stars } from '@react-three/drei'
+import { OrbitControls, ScrollControls, useScroll, Stars, Float } from '@react-three/drei'
 import gsap from 'gsap'
 
 function App() {
@@ -10,12 +10,19 @@ function App() {
     <>
       <Canvas>
         <color attach="background" args={['black']} />
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+        <Float speed={1} // Animation speed, defaults to 1
+          rotationIntensity={1} // XYZ rotation intensity, defaults to 1
+          floatIntensity={1} // Up/down float intensity, works like a multiplier with floatingRange,defaults to 1
+          floatingRange={[1, 10]} // Range of y-axis values the object will float within, defaults to [-0.1,0.1]
+        >
+          <Stars radius={100} depth={50} count={5000} factor={4} saturation={1} fade speed={2} />
+
+        </Float>
         <ScrollControls pages={3} damping={0.5}>
           <Scene />
         </ScrollControls>
 
-      </Canvas>
+      </Canvas >
     </>
   )
 }
