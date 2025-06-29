@@ -1,5 +1,5 @@
 import './App.css'
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react'
 import * as THREE from 'three'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
@@ -50,11 +50,16 @@ function snapToClosest(progress, snapPoints, threshold = 0.05) {
 const Scene = () => {
 
   const tl = useRef(gsap.timeline({ paused: true }))
+  const refModel1 = useRef(null)
+  const refModel2 = useRef(null)
+
   const scroll = useScroll();
 
-  const { camera } = useThree()
+  const { camera, scene } = useThree()
 
   useEffect(() => {
+    const group = new THREE.Group();
+
     tl.current
       .to(camera.position, {
         z: -3,
@@ -62,10 +67,42 @@ const Scene = () => {
         ease: 'linear'
       }, 0.3) // start at progress 0
       .to(camera.position, {
-        z: -10,
+        z: -7,
         duration: 0.25,
         ease: 'linear'
       }, ">0.5") // start at 0.5
+    tl.current
+      // .to(group.position, {
+      //   z: -6,
+      //   x: -1,
+      //   duration: 0.3,
+      //   ease: 'power2.inOut'
+      // }, ">0.8")
+      // .to(group.rotation, {
+      //   x: 0,
+      //   y: Math.PI / 2,
+      //   z: 0,
+      //   duration: 0.3,
+      //   ease: 'power2.inOut',
+      //   onStart: () => {
+      //     if (refModel1.current) {
+      //       scene.remove(refModel1.current)
+      //       scene.remove(camera)
+      //       group.add(refModel1.current)
+      //       group.add(camera)
+      //       scene.add(group)
+      //     }
+      //   },
+      //   onComplete: () => {
+      //     if (refModel1.current) {
+      //       group.remove(refModel1.current)
+      //       group.remove(camera)
+      //       scene.remove(group)
+      //       scene.add(refModel1.current)
+      //       scene.add(camera)
+      //     }
+      //   }
+      // }, ">0.8") // запускаются одновременно
     // .to(camera.position, {
     //   z: 10,
     //   duration: 0.25,
@@ -86,8 +123,8 @@ const Scene = () => {
       <pointLight position={[10, 10, 10]} />
       {/* <Logo tl={tl} /> */}
       <Suspense fallback={null}>
-        <Model tl={tl} color={'#A5A5E0'} position={[0, 0, 0]} />
-        <Model tl={tl} color={'#000022'} position={[0.05, 0, 0]} />
+        <Model ref={refModel1} tl={tl} color={'#A5A5E0'} position={[0, 0, 0]} />
+        <Model ref={refModel2} tl={tl} color={'#000022'} position={[0.05, 0, 0]} />
       </Suspense>
       <Description tl={tl} />
       <Planes tl={tl} />
@@ -111,63 +148,58 @@ const Scene = () => {
 
 useGLTF.preload('./vrt.glb')
 
-const Model = ({ tl, color, position }) => {
-  const ref = useRef()
-  const { material, nodes } = useGLTF('./vrt.glb')
-  const posX = color === 'blue' ? -0.2 : 0;
-
+const Model = forwardRef(({ tl, color, position }, ref) => {
+  const { nodes } = useGLTF('./vrt.glb');
 
   useEffect(() => {
-    if (ref.current) {
+    if (!ref?.current) return;
 
-      // Добавляем анимацию в Timeline
-      tl.current.to(ref.current.position, {
-        x: 0,
-        duration: 0.2,
-        ease: 'bounce.in' // добавлен ease
-      }, 0.15) // start at progress 0
+    const mesh = ref.current;
 
-      tl.current.to(ref.current.position, {
-        x: 0,
-        duration: 0.2,
-        ease: 'bounce.in' // добавлен ease
-      }, 0.35) // start at progress 0
+    // Анимации GSAP
+    tl.current.to(mesh.position, {
+      x: 0,
+      duration: 0.2,
+      ease: 'bounce.in',
+    }, 0.15);
 
-      tl.current.to(ref.current.position, {
-        z: -10,
-        duration: 2,
-        ease: 'back.out(1.7)' // легкий отскок в конце
-      }, 0.55) // start at progress 0
-    }
-  }, [])
+    tl.current.to(mesh.position, {
+      x: 0,
+      duration: 0.2,
+      ease: 'bounce.in',
+    }, 0.35);
+
+    tl.current.to(mesh.material.color, {
+      r: 0,
+      g: 0,
+      b: 0.45,
+      duration: 0.1,
+      ease: 'linear',
+    }, 0.45);
+
+    tl.current.to(mesh.position, {
+      z: -10,
+      duration: 2,
+      ease: 'back.out(1.7)',
+    }, 0.55);
+  }, []);
 
   return (
-    <>
-      <group >
-        <Center>
-          <mesh ref={ref} geometry={nodes.svgMesh1.geometry}
-            rotation={[Math.PI / 2, 0, 0]}
-            position={position}
-
-            scale={0.06}>
-            <meshPhysicalMaterial
-              color={color}
-            // clearcoat={1}
-            // metalness={0.5}
-            // roughness={0.1}
-            // reflectivity={0.5}
-            // envMapIntensity={1}
-            />
-            {/* <MeshPhysicalMaterial
-            color='yellow'
-            clearcoat={1}
-          /> */}
-          </mesh>
-        </Center>
-      </group>
-    </>
-  )
-}
+    <group>
+      <Center>
+        <mesh
+          ref={ref}
+          geometry={nodes.svgMesh1.geometry}
+          rotation={[Math.PI / 2, 0, 0]}
+          position={position}
+          scale={0.06}
+        >
+          <meshPhysicalMaterial color={color} />
+        </mesh>
+      </Center>
+    </group>
+  );
+});
 
 const Logo = ({ tl }) => {
   const ref = useRef()

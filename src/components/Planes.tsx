@@ -22,57 +22,6 @@ const blueShades = [
     { name: "Mist", hex: "#A5A5E0", rgb: "rgb(165, 165, 224)" }       // Самый светлый
 ];
 
-export const StaticPlanec = ({ tl }) => {
-    const groupRef = useRef<THREE.Group>(null!)
-
-    useEffect(() => {
-
-        if (groupRef.current) {
-            const children = groupRef.current.children
-            console.log('children', children)
-
-            tl.current.to(
-                children.map(obj => obj.scale),
-                {
-                    x: 5.5,
-                    y: 5.5,
-                    z: 5.5,
-                    duration: 0.5,
-                    ease: 'bounce.in',
-                },
-                0.3
-            )
-
-            tl.current.to(
-                children.map(obj => obj.scale),
-                {
-                    x: 1.5,
-                    y: 1.5,
-                    z: 1.5,
-                    stagger: 0.3,
-                    duration: 0.5,
-                    ease: 'back.out(1.7)',
-                },
-                0.7 // 👈 тот же момент времени
-            )
-        }
-
-    }, [])
-
-    return (
-        <>
-            <group ref={groupRef}>
-                {items.map((item, index) => (
-                    <mesh key={index} scale={[0.1, 0.1, 0.1]} position={[positionX, positionY, zPosition(index)]} rotation={[0, 0, 0]}>
-                        <planeGeometry args={[10 * scale, 10 * scale]} />
-                        <meshStandardMaterial side={THREE.DoubleSide} color={blueShades[index].hex} />
-                    </mesh>
-                ))}
-            </group>
-        </>
-    )
-}
-
 export const Planes = ({ tl, isRotating = true, scale = 1, positionX = 0, positionY = 0, positionZ = -50 }) => {
     const groupRef = useRef<THREE.Group>(null!)
 
@@ -112,11 +61,11 @@ export const Planes = ({ tl, isRotating = true, scale = 1, positionX = 0, positi
                         x: 1.5,
                         y: 1.5,
                         z: 1.5,
-                        stagger: 0.3,
-                        duration: 0.5,
+                        stagger: 0.1,
+                        duration: 0.2,
                         ease: 'back.out(1.7)',
                     },
-                    0.7 // 👈 тот же момент времени
+                    0.9 // 👈 тот же момент времени
                 )
             }
 
@@ -133,7 +82,7 @@ export const Planes = ({ tl, isRotating = true, scale = 1, positionX = 0, positi
             <group ref={groupRef}>
                 {isRotating && <mesh scale={[0.1, 0.1, 0.1]} position={[positionX, positionY, zPosition(-1)]} rotation={[0, 0, 0]}>
                     <planeGeometry args={[10 * scale, 10 * scale]} />
-                    <meshStandardMaterial side={THREE.DoubleSide} color={'blue'} />
+                    <meshStandardMaterial side={THREE.DoubleSide} color={'#220022'} />
                 </mesh>}
                 {items.map((item, index) => (
                     <mesh key={index} scale={[0.1, 0.1, 0.1]} position={[positionX, positionY, zPosition(index)]} rotation={[0, 0, 0]}>
