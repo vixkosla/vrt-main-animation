@@ -71,38 +71,64 @@ const Scene = () => {
         duration: 0.25,
         ease: 'linear'
       }, ">0.5") // start at 0.5
-    tl.current
-      // .to(group.position, {
-      //   z: -6,
-      //   x: -1,
-      //   duration: 0.3,
-      //   ease: 'power2.inOut'
-      // }, ">0.8")
-      // .to(group.rotation, {
-      //   x: 0,
-      //   y: Math.PI / 2,
-      //   z: 0,
-      //   duration: 0.3,
-      //   ease: 'power2.inOut',
-      //   onStart: () => {
-      //     if (refModel1.current) {
-      //       scene.remove(refModel1.current)
-      //       scene.remove(camera)
-      //       group.add(refModel1.current)
-      //       group.add(camera)
-      //       scene.add(group)
-      //     }
-      //   },
-      //   onComplete: () => {
-      //     if (refModel1.current) {
-      //       group.remove(refModel1.current)
-      //       group.remove(camera)
-      //       scene.remove(group)
-      //       scene.add(refModel1.current)
-      //       scene.add(camera)
-      //     }
-      //   }
-      // }, ">0.8") // запускаются одновременно
+      .to([camera.position, refModel1.current.position], {
+        z: -6,
+        x: -1,
+        duration: 0.3,
+        ease: 'power2.inOut'
+      }, 4.5)
+      .to([camera.rotation, refModel1.current.rotation], {
+        x: 0,
+        y: Math.PI / 2,
+        z: 0,
+        duration: 0.3,
+        ease: 'power2.inOut'
+      }, 4.5)
+      .to(refModel1.current.material.color, {
+        r: 0.25,
+        g: 0.65,
+        b: 0.05,
+        duration: 0.15,
+        ease: 'power2.inOut'
+      }, 4.5)
+      .to([refModel1.current.rotation], {
+        x: Math.PI / 2,
+        y: 0,
+        z: 3 * Math.PI / 2,
+        duration: 0.3,
+        ease: 'power2.inOut'
+      }, 4.8)
+      .to(camera.position, {
+        x: 1,
+        z: -7,
+        duration: 0.25,
+        ease: 'power2.inOut'
+      }, 4.8) // start at 0.5
+    // .to(group.rotation, {
+    //   x: 0,
+    //   y: Math.PI / 2,
+    //   z: 0,
+    //   duration: 0.3,
+    //   ease: 'power2.inOut',
+    //   onStart: () => {
+    //     if (refModel1.current) {
+    //       scene.remove(refModel1.current)
+    //       scene.remove(camera)
+    //       group.add(refModel1.current)
+    //       group.add(camera)
+    //       scene.add(group)
+    //     }
+    //   },
+    //   onComplete: () => {
+    //     if (refModel1.current) {
+    //       group.remove(refModel1.current)
+    //       group.remove(camera)
+    //       scene.remove(group)
+    //       scene.add(refModel1.current)
+    //       scene.add(camera)
+    //     }
+    //   }
+    // }, ">0.8") // запускаются одновременно
     // .to(camera.position, {
     //   z: 10,
     //   duration: 0.25,
@@ -175,7 +201,7 @@ const Model = forwardRef(({ tl, color, position }, ref) => {
       b: 0.45,
       duration: 0.1,
       ease: 'linear',
-    }, 0.45);
+    }, ">0.75");
 
     tl.current.to(mesh.position, {
       z: -10,

@@ -82,7 +82,7 @@ export const Planes = ({ tl, isRotating = true, scale = 1, positionX = 0, positi
             <group ref={groupRef}>
                 {isRotating && <mesh scale={[0.1, 0.1, 0.1]} position={[positionX, positionY, zPosition(-1)]} rotation={[0, 0, 0]}>
                     <planeGeometry args={[10 * scale, 10 * scale]} />
-                    <meshStandardMaterial side={THREE.DoubleSide} color={'#220022'} />
+                    <meshStandardMaterial side={THREE.DoubleSide} color={'#A5A5E0'} />
                 </mesh>}
                 {items.map((item, index) => (
                     <mesh key={index} scale={[0.1, 0.1, 0.1]} position={[positionX, positionY, zPosition(index)]} rotation={[0, 0, 0]}>
