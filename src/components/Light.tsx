@@ -20,7 +20,7 @@ export const Lights = () => {
             <ambientLight intensity={0.9} />
             {/* <pointLight position={[10, 10, 10]} intensity={1} /> */}
             {/* <spotLight position={[0, 10, 0]} angle={0.15} penumbra={1} intensity={2} /> */}
-            <directionalLight ref={lightRef} intensity={1} />
+            <directionalLight ref={lightRef} intensity={0.3} />
         </>
     )
 }

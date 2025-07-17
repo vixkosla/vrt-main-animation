@@ -1,6 +1,20 @@
-import { is } from '@react-three/fiber/dist/declarations/src/core/utils';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import * as THREE from 'three'
+// import { MeshStandardNodeMaterial } from 'three/nodes'
+// import { MeshStandardNodeMaterial } from 'three/examples/jsm/nodes/materials/MeshStandardNodeMaterial.js'
+import { instanceIndex, positionLocal, storage, wgslFn, color, uniform } from 'three/tsl'
+
+import { extend, useFrame } from '@react-three/fiber'
+// import { shaderMaterial } from '@react-three/drei';
+
+import fragment from '../shaders/Plane/main.frag';
+import vertex from '../shaders/Plane/main.vert';
+
+// import { MeshPhysicalNodeMaterial } from 'three-stdlib'
+
+// extend({
+//     MeshStandardNodeMaterial
+// })
 
 const randomColor = () => {
     const r = Math.random();
@@ -23,7 +37,25 @@ const blueShades = [
 ];
 
 export const Planes = ({ tl, isRotating = true, scale = 1, positionX = 0, positionY = 0, positionZ = -50 }) => {
-    const groupRef = useRef<THREE.Group>(null!)
+    const groupRef = useRef(null)
+    const materialRef = useRef(null)
+    // const material = node
+
+    const material = useMemo(() =>
+        new THREE.ShaderMaterial({
+            wireframe: false,
+            vertexShader: vertex,
+            fragmentShader: fragment,
+            side: THREE.DoubleSide,
+            uniforms: { uTime: { value: 0 } },
+            transparent: true
+        }), []
+    )
+
+    useFrame((state, delta) => {
+            material.uniforms.uTime.value += delta;
+            // console.log('materialRef.current.uniforms.uTime.value', materialRef.current.uniforms.uTime.value)
+    })
 
     useEffect(() => {
 
@@ -80,14 +112,34 @@ export const Planes = ({ tl, isRotating = true, scale = 1, positionX = 0, positi
     return (
         <>
             <group ref={groupRef}>
-                {isRotating && <mesh scale={[0.1, 0.1, 0.1]} position={[positionX, positionY, zPosition(-1)]} rotation={[0, 0, 0]}>
+                {/* {isRotating && <mesh scale={[0.1, 0.1, 0.1]} position={[positionX, positionY, zPosition(-1)]} rotation={[0, 0, 0]}>
                     <planeGeometry args={[10 * scale, 10 * scale]} />
                     <meshStandardMaterial side={THREE.DoubleSide} color={'#A5A5E0'} />
-                </mesh>}
+                </mesh>} */}
                 {items.map((item, index) => (
                     <mesh key={index} scale={[0.1, 0.1, 0.1]} position={[positionX, positionY, zPosition(index)]} rotation={[0, 0, 0]}>
-                        <planeGeometry args={[10 * scale, 10 * scale]} />
-                        <meshStandardMaterial side={THREE.DoubleSide} color={blueShades[index].hex} />
+                        <planeGeometry args={[10 * scale, 10 * scale, 35, 5]} />
+                        {/* <meshStandardMaterial side={THREE.DoubleSide} color={blueShades[index].hex} /> */}
+                        {/* <meshPhysicalNodeMaterial /> */}
+                        {/* <meshPhysicalNodeMaterial
+                            vertexShader={vertex}
+                            fragmentShader={fragment}
+                            side={THREE.DoubleSide}
+                            color={blueShades[index].hex}
+                            roughness={0.5}
+                            metalness={0.5}
+                            clearcoat={0.5}
+                            clearcoatRoughness={0.1}/> */}
+                        {/* <shaderMaterial
+                            ref={materialRef}
+                            // wireframe
+                            vertexShader={vertex}
+                            fragmentShader={fragment}
+                            side={THREE.DoubleSide}
+                            uniforms={{ uTime: { value: 0 } }}
+                            transparent={true}
+                        /> */}
+                        <primitive object={material} attach="material" />
                     </mesh>
                 ))}
             </group>

@@ -1,6 +1,6 @@
 import './App.css'
 import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react'
-import * as THREE from 'three'
+import * as THREE from 'three/webgpu'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Suspense } from 'react'
@@ -9,13 +9,17 @@ import gsap from 'gsap'
 
 import { Planes } from './components/Planes'
 import { Lights } from './components/Light'
+import { Space } from './components/Space'
+
+import { EffectComposer } from '@react-three/postprocessing'
 
 function App() {
 
   return (
     <>
       <Canvas shadows={false}>
-        <color attach="background" args={['black']} />
+        <Space/>
+        {/* <color attach="background" args={['black']} /> */}
         <StatsGl className="stats" />
         <Float speed={1} // Animation speed, defaults to 1
           rotationIntensity={1} // XYZ rotation intensity, defaults to 1
@@ -29,6 +33,9 @@ function App() {
           <Scene />
         </ScrollControls>
         <Lights />
+        <EffectComposer>
+          {/* <GammaCorrectionShader /> */}
+        </EffectComposer>
       </Canvas >
     </>
   )
@@ -68,7 +75,7 @@ const Scene = () => {
       }, 0.3) // start at progress 0
       .to(camera.position, {
         z: -7,
-        duration: 0.25,
+        duration: 0.15,
         ease: 'linear'
       }, ">0.5") // start at 0.5
       .to([camera.position, refModel1.current.position], {
@@ -83,7 +90,7 @@ const Scene = () => {
         z: 0,
         duration: 0.3,
         ease: 'power2.inOut'
-      }, 4.5)
+      }, 4.7)
       .to(refModel1.current.material.color, {
         r: 0.25,
         g: 0.65,
@@ -145,8 +152,6 @@ const Scene = () => {
 
   return (
     <>
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} />
       {/* <Logo tl={tl} /> */}
       <Suspense fallback={null}>
         <Model ref={refModel1} tl={tl} color={'#A5A5E0'} position={[0, 0, 0]} />
@@ -154,17 +159,17 @@ const Scene = () => {
       </Suspense>
       <Description tl={tl} />
       <Planes tl={tl} />
-      {
+      {/* {
         Array.from({ length: 35 }).map((plane, index) => (
           <Planes tl={tl}
             key={index}
             isRotating={false}
             positionX={Math.random() * 100 - 50}
-            positionY={Math.random() * 100 - 50} scale={0.1} />
+            positionY={Math.random() * 100 - 50} scale={0.05} />
         ))
-      }
+      } */}
 
-      {/* <OrbitControls /> */}
+      <OrbitControls />
       {/* <Box tl={tl} /> */}
       {/* <Ball tl={tl} /> */}
     </>
@@ -212,17 +217,17 @@ const Model = forwardRef(({ tl, color, position }, ref) => {
 
   return (
     <group>
-      <Center>
-        <mesh
-          ref={ref}
-          geometry={nodes.svgMesh1.geometry}
-          rotation={[Math.PI / 2, 0, 0]}
-          position={position}
-          scale={0.06}
-        >
-          <meshPhysicalMaterial color={color} />
-        </mesh>
-      </Center>
+      {/* <Center> */}
+      <mesh
+        ref={ref}
+        geometry={nodes.svgMesh1.geometry}
+        rotation={[Math.PI / 2, 0, 0]}
+        position={position}
+        scale={0.06}
+      >
+        <meshPhysicalMaterial color={color} />
+      </mesh>
+      {/* </Center> */}
     </group>
   );
 });
@@ -316,7 +321,8 @@ const Ball = ({ tl }) => {
     <>
       <mesh ref={ref} position={[-1.5, 0.5, 0]}>
         <sphereGeometry args={[0.5, 32, 32]} />
-        <meshStandardMaterial color={'blue'} />
+        {/* <meshStandardMaterial color={'blue'} /> */}
+        {/* <meshStandardNodeMaterial/> */}
       </mesh>
     </>
   )
