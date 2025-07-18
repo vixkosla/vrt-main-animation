@@ -4,7 +4,11 @@ import glsl from 'vite-plugin-glsl'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), glsl()],
+  plugins: [react(), glsl(
+    {
+      include: '**/*.glsl'
+    }
+  )],
   optimizeDeps: {
     // exclude: ['@react-three/fiber'],
   },

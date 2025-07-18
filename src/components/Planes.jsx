@@ -7,8 +7,8 @@ import { instanceIndex, positionLocal, storage, wgslFn, color, uniform } from 't
 import { extend, useFrame } from '@react-three/fiber'
 // import { shaderMaterial } from '@react-three/drei';
 
-import fragment from '../shaders/Plane/frag.glsl';
-import vertex from '../shaders/Plane/vert.glsl';
+import fragment from '../shaders/plane/frag.glsl';
+import vertex from '../shaders/plane/vert.glsl';
 
 // import { MeshPhysicalNodeMaterial } from 'three-stdlib'
 
