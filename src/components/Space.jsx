@@ -3,8 +3,8 @@ import * as THREE from 'three'
 
 import { useFrame, useThree } from '@react-three/fiber'
 
-import vertex from '../shaders/space/vert.glsl'
-import fragment from '../shaders/space/frag.glsl'
+import vertex from '../shaders/space/vert.vert'
+import fragment from '../shaders/space/frag.frag'
 
 export const Space = () => {
     console.log('background added')
