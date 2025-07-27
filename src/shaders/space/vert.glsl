@@ -15,8 +15,12 @@ void main() {
         new_position.z *= abs(sin(u_time));
     } else if (u_time < 10.0) {
         new_position.z += abs(sin(u_time * uv.x * 5.8)) * 31.9;
-    } else {
+    } else if (u_time < 15.0) {
         new_position.z += abs(sin(u_time * uv.x * uv.y * 15.8)) * 50.15;
+    } else {
+        float b = new_position.z + abs(sin(u_time * uv.x * uv.y * 15.8)) * 10.15;
+        float a = smoothstep(new_position.z, b, u_time - 15.0);
+        new_position.z = mix(new_position.z, b, a);
     }
 
 

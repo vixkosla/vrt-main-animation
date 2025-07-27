@@ -10,15 +10,19 @@ import gsap from 'gsap'
 import { Planes } from './components/Planes'
 import { Lights } from './components/Light'
 import { Space } from './components/Space'
+import { Model } from './components/Model'
+import { Windows } from './components/Windows'
 
 import { EffectComposer } from '@react-three/postprocessing'
+
+import { u_progress, u_timer } from './store/uniformsStore'
 
 function App() {
 
   return (
     <>
-      <Canvas shadows={false}>
-        <Space/>
+      <Canvas shadows={false} antialias={true}>
+        <Space />
         {/* <color attach="background" args={['black']} /> */}
         <StatsGl className="stats" />
         <Float speed={1} // Animation speed, defaults to 1
@@ -56,13 +60,23 @@ function snapToClosest(progress, snapPoints, threshold = 0.05) {
 
 const Scene = () => {
 
-  const tl = useRef(gsap.timeline({ paused: true }))
+  const tl = useRef(gsap.timeline({
+    paused: true,
+    onUpdate: () => {
+      u_progress.value = tl.current.progress()
+    }
+  }))
   const refModel1 = useRef(null)
   const refModel2 = useRef(null)
 
   const scroll = useScroll();
 
   const { camera, scene } = useThree()
+
+
+  useFrame((state, delta) => {
+    u_timer.value += delta;
+  })
 
   useEffect(() => {
     const group = new THREE.Group();
@@ -159,6 +173,7 @@ const Scene = () => {
       </Suspense>
       <Description tl={tl} />
       <Planes tl={tl} />
+      <Windows tl={tl}/>
       {/* {
         Array.from({ length: 35 }).map((plane, index) => (
           <Planes tl={tl}
@@ -169,68 +184,12 @@ const Scene = () => {
         ))
       } */}
 
-      <OrbitControls />
+      {/* <OrbitControls /> */}
       {/* <Box tl={tl} /> */}
       {/* <Ball tl={tl} /> */}
     </>
   )
 }
-
-
-useGLTF.preload('./vrt.glb')
-
-const Model = forwardRef(({ tl, color, position }, ref) => {
-  const { nodes } = useGLTF('./vrt.glb');
-
-  useEffect(() => {
-    if (!ref?.current) return;
-
-    const mesh = ref.current;
-
-    // Анимации GSAP
-    tl.current.to(mesh.position, {
-      x: 0,
-      duration: 0.2,
-      ease: 'bounce.in',
-    }, 0.15);
-
-    tl.current.to(mesh.position, {
-      x: 0,
-      duration: 0.2,
-      ease: 'bounce.in',
-    }, 0.35);
-
-    tl.current.to(mesh.material.color, {
-      r: 0,
-      g: 0,
-      b: 0.45,
-      duration: 0.1,
-      ease: 'linear',
-    }, ">0.75");
-
-    tl.current.to(mesh.position, {
-      z: -10,
-      duration: 2,
-      ease: 'back.out(1.7)',
-    }, 0.55);
-  }, []);
-
-  return (
-    <group>
-      {/* <Center> */}
-      <mesh
-        ref={ref}
-        geometry={nodes.svgMesh1.geometry}
-        rotation={[Math.PI / 2, 0, 0]}
-        position={position}
-        scale={0.06}
-      >
-        <meshPhysicalMaterial color={color} />
-      </mesh>
-      {/* </Center> */}
-    </group>
-  );
-});
 
 const Logo = ({ tl }) => {
   const ref = useRef()

@@ -6,6 +6,8 @@ import { useFrame, useThree } from '@react-three/fiber'
 import vertex from '../shaders/space/vert.glsl'
 import fragment from '../shaders/space/frag.glsl'
 
+import { u_progress } from '../store/uniformsStore'
+
 export const Space = () => {
     console.log('background added')
 
@@ -22,8 +24,6 @@ export const Space = () => {
 const Sphere = () => {
     const { mouse } = useThree()
 
-
-
     const material = useMemo(() =>
         new THREE.ShaderMaterial({
             wireframe: false,
@@ -31,6 +31,7 @@ const Sphere = () => {
             fragmentShader: fragment,
             side: THREE.BackSide,
             uniforms: {
+                u_progress,
                 u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
                 u_mouse: { value: new THREE.Vector2(0, 0) },
                 u_time: { value: 0 }

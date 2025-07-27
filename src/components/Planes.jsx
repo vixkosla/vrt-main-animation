@@ -16,6 +16,8 @@ import vertex from '../shaders/plane/vert.glsl';
 //     MeshStandardNodeMaterial
 // })
 
+import { u_progress, u_timer } from '../store/uniformsStore'
+
 const randomColor = () => {
     const r = Math.random();
     const g = Math.random();
@@ -36,7 +38,7 @@ const blueShades = [
     { name: "Mist", hex: "#A5A5E0", rgb: "rgb(165, 165, 224)" }       // Самый светлый
 ];
 
-export const Planes = ({ tl, isRotating = true, scale = 1, positionX = 0, positionY = 0, positionZ = -50 }) => {
+export const Planes = ({ tl, isRotating = true, scale = 1, positionX = 0, positionY = 0, positionZ = -30 }) => {
     const groupRef = useRef(null)
     const materialRef = useRef(null)
     // const material = node
@@ -46,15 +48,20 @@ export const Planes = ({ tl, isRotating = true, scale = 1, positionX = 0, positi
             wireframe: false,
             vertexShader: vertex,
             fragmentShader: fragment,
-            side: THREE.DoubleSide,
-            uniforms: { uTime: { value: 0 } },
+            side: THREE.FrontSide,
+            uniforms: {
+                u_timer,
+                u_progress,
+                u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+                uTime: { value: 0 },
+            },
             transparent: true
         }), []
     )
 
     useFrame((state, delta) => {
-            material.uniforms.uTime.value += delta;
-            // console.log('materialRef.current.uniforms.uTime.value', materialRef.current.uniforms.uTime.value)
+        material.uniforms.uTime.value += delta;
+        // console.log('materialRef.current.uniforms.uTime.value', materialRef.current.uniforms.uTime.value)
     })
 
     useEffect(() => {
@@ -106,7 +113,7 @@ export const Planes = ({ tl, isRotating = true, scale = 1, positionX = 0, positi
 
     }, [])
 
-    const items = Array.from({ length: 10 })
+    const items = Array.from({ length: 1 })
     const zPosition = (index) => positionZ + (index * 0.3 * (-1))
 
     return (

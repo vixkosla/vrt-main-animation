@@ -2,6 +2,7 @@
 precision highp float;
 #endif
 
+uniform float u_progress;
 uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 uniform float u_time;
@@ -20,12 +21,22 @@ void main() {
     // pct = pow(pct, 2.0)
 
 
-    if (u_time < 15.0) {
+    if (u_time < 16.0) {
         pct = pow(pct, abs(sin(u_time) * 0.4) + 0.0);
     } else {
         pct = pow(pct, 1.0 * 0.4 + 0.0);
     }
     // vec4 color = vec4(vec3(pct), 1.0);
 
-    gl_FragColor = vec4(0.0, 0.0, 0.5 - pct, 1.0); // Set the fragment color to black
+    float red = 0.0;
+    float green = 0.0;
+
+    if (u_progress > 0.7) {
+        red = mix(0.0, 0.5, (u_progress - 0.7) / (1.0 - 0.7)* 1.0);
+        green = mix(0.0, 0.1, (u_progress - 0.7) / (1.0 - 0.7) * 1.0);
+    }
+
+    vec3 color = vec3(red, green, 0.5) - pct;
+ 
+    gl_FragColor = vec4(color, 1.0); // Set the fragment color to black
 }
