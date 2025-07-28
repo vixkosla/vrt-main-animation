@@ -1,4 +1,4 @@
-precision highp float;
+precision mediump float;
 
 varying vec2 vUv;
 varying vec3 vPosition;
