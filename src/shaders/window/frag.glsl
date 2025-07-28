@@ -1,4 +1,4 @@
-precision mediump float;
+precision highp float;
 
 varying vec2 vUv;
 varying vec3 vPosition;
@@ -23,11 +23,7 @@ float circle(vec2 _st, float _radius){
 void main() {
 
     float blue = u_index * 0.1 + 0.6;
-    float red = 0.1371;
-
-    if (u_progress > 0.4) {
-        red += u_progress * 0.6;
-    }
+    float red = mix(0.1371, 0.1371 + u_progress * 0.7, u_progress);
     
     vec3 color = vec3(red, 0.0745, blue);
     color *= vec3(random(vUv));
