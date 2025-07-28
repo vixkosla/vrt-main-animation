@@ -29,7 +29,7 @@ export const Windows = ({ tl }) => {
             {
                 z: Math.PI,
                 stagger: 0.05,
-                duration: 0.05,
+                duration: 0.25,
                 ease: 'power2.inOut',
             },
             0.8
@@ -39,8 +39,8 @@ export const Windows = ({ tl }) => {
             children.map(obj => obj.rotation),
             {
                 z: -Math.PI,
-                stagger: 0.025,
-                duration: 0.15,
+                stagger: 0.05,
+                duration: 0.25,
                 ease: 'power2.inOut',
             },
             1.0

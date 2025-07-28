@@ -52,7 +52,7 @@ void main() {
     vec3 color = vec3(0.0);
     st *= 1.0;
     if (u_progress < 0.3) {
-        color.b = st.y * 0.3 * (1.0 - u_progress * 3.33);
+        color.b += st.y * 0.3 * (1.0 - u_progress * 3.33);
     } else if (u_progress < 0.7) {
         color.b -= st.y * 0.1 * (u_progress - 0.3) / (0.7 - 0.3);
     } else {
