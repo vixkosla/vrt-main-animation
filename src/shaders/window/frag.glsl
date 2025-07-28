@@ -23,7 +23,13 @@ float circle(vec2 _st, float _radius){
 void main() {
 
     float blue = u_index * 0.1 + 0.6;
-    vec3 color = vec3(0.1373, 0.0745, blue);
+    float red = 0.1371;
+
+    if (u_progress > 0.4) {
+        red += u_progress * 0.6;
+    }
+    
+    vec3 color = vec3(red, 0.0745, blue);
     color *= vec3(random(vUv));
 
     float rd = 0.06 * u_progress * 1.2 + 0.02;
