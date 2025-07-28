@@ -13,26 +13,26 @@ export const Windows = ({ tl }) => {
     useEffect(() => {
         const children = groupRef.current.children;
 
-        tl.current.to(
-            children.map(obj => obj.position),
-            {
-                z: -5,
-                stagger: 0.015,
-                duration: 0.5,
-                ease: 'power2.inOut',
-            },
-            1.4
-        )
+        // tl.current.to(
+        //     children.map(obj => obj.position),
+        //     {
+        //         z: -5,
+        //         stagger: 0.35,
+        //         duration: 0.25,
+        //         ease: 'power2.inOut',
+        //     },
+        //     0.8
+        // )
 
         tl.current.to(
             children.map(obj => obj.rotation),
             {
                 z: Math.PI,
-                stagger: 1.25,
-                duration: 2.5,
+                stagger: 0.05,
+                duration: 0.05,
                 ease: 'power2.inOut',
             },
-            2.5
+            0.8
         )
 
         tl.current.to(
@@ -40,14 +40,14 @@ export const Windows = ({ tl }) => {
             {
                 z: -Math.PI,
                 stagger: 0.025,
-                duration: 1.5,
+                duration: 0.15,
                 ease: 'power2.inOut',
             },
-            2.7
+            1.0
         )
     }, [])
 
-    const items = Array.from({ length: 3 })
+    const items = Array.from({ length: 7 })
 
     return (
         <>

@@ -10,7 +10,7 @@ export const Lights = () => {
     
     useEffect(() => {
         const lightHelper = new THREE.DirectionalLightHelper(lightRef.current);
-        // scene.add(lightHelper);
+        scene.add(lightHelper);
         lightRef.current.target.position.set(0, 0, -50);
         lightRef.current.position.set(0, 0, 0)
     }, [])
