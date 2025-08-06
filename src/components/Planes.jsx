@@ -97,14 +97,27 @@ export const Planes = ({ tl, isRotating = true, scale = 1, positionX = 0, positi
                 tl.current.to(
                     children.map(obj => obj.scale),
                     {
-                        x: 1.5,
-                        y: 1.5,
-                        z: 1.5,
+                        x: 0.75,
+                        y: 0.75,
+                        z: 0.75,
                         stagger: 0.1,
                         duration: 0.2,
                         ease: 'back.out(1.7)',
                     },
                     0.9 // 👈 тот же момент времени
+                )
+
+                                tl.current.to(
+                    children.map(obj => obj.scale),
+                    {
+                        x: 1.75,
+                        y: 1.75,
+                        z: 1.75,
+                        stagger: 0.1,
+                        duration: 1.0,
+                        ease: 'back.out(1.7)',
+                    },
+                    1.2 // 👈 тот же момент времени
                 )
             }
 
